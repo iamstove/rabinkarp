@@ -14,7 +14,6 @@ namespace rabin_karp
         public static double hashnum = 15485863;
         static void Main(string[] args)
         {
-            
             Console.WriteLine("Welcome to Rabin Karp!");
             string path = Directory.GetCurrentDirectory();
             //Console.WriteLine(path);
@@ -54,7 +53,6 @@ namespace rabin_karp
                         counter++;
                         if ((int)next == -1)
                         {
-                            
                             Console.WriteLine("Pattern not found");
                             break;
                         }
@@ -64,7 +62,7 @@ namespace rabin_karp
                         subtext += next;
                         //BigInteger txthorners2 = horners(subtext);
                         Console.WriteLine(subtext + " = " + txthorners);
-                        System.Threading.Thread.Sleep(500);
+                        //System.Threading.Thread.Sleep(500);
                     }
                     if (txthorners == pathorners)
                     {
