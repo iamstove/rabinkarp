@@ -28,7 +28,7 @@ namespace rabin_karp
             //hash the pattern
             BigInteger pathorners = horners(pattern);
             BigInteger pathash = pathorners % 15485863;
-            Console.WriteLine(pathorners);
+            //Console.WriteLine(pathorners);
 
             using(FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read)){ //do everything with the file in here, in this case it's everything
                 //first read is size pattern.length, everything after is just 1 to compute the rolling hash. 
@@ -40,38 +40,27 @@ namespace rabin_karp
                     counter++;
                 } //subtext is now ready to be hashed
                 BigInteger txthorners = horners(subtext);
-                Console.WriteLine(txthorners);
-                if (txthorners == pathorners)
-                {
-                    Console.WriteLine("Match found at location " + counter);
-                    Environment.Exit(0);
-                }
-                else //no match, we must roll it baby
-                {
-                    while (txthorners != pathorners)
-                    {
-                        char next = (char)fs.ReadByte(); //read in the new byte
-                        counter++;
-                        if ((int)next == -1)
-                        {
-                            
-                            Console.WriteLine("Pattern not found");
-                            break;
-                        }
-                        //Console.Write();
-                        txthorners = rollhash(txthorners, subtext[0], next, (int)subtext.Length); //roll the hash
-                        subtext = subtext.Remove(0, 1); //change the string in the text
-                        subtext += next;
-                        //BigInteger txthorners2 = horners(subtext);
-                        Console.WriteLine(subtext + " = " + txthorners);
-                        System.Threading.Thread.Sleep(500);
-                    }
+                //Console.WriteLine(txthorners);                
+                do{ 
                     if (txthorners == pathorners)
                     {
                         Console.WriteLine("Match found at location " + counter);
-                        Environment.Exit(0);
+                        //Environment.Exit(0);
                     }
-                }
+                    int next = fs.ReadByte(); //read in the new byte
+                    counter++;
+                    if (next == -1)
+                    {                            
+                        Console.WriteLine("End of file reached");
+                        break;
+                    }
+                    //Console.Write();
+                    txthorners = rollhash(txthorners, subtext[0], (char)next, (int)subtext.Length); //roll the hash
+                    subtext = subtext.Remove(0, 1); //change the string in the text
+                    subtext += (char)next;
+                    Console.WriteLine(subtext + " = " + txthorners);
+                    //System.Threading.Thread.Sleep(500);                    
+                }while(true);
             }
             Console.Read();
         }
