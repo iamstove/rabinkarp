@@ -27,7 +27,8 @@ namespace rabin_karp
             using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read))
             { //do everything with the file in here, in this case it's everything
                 //first read is size pattern.length, everything after is just 1 to compute the rolling hash.
-                string subtext = "";
+                string subtext = "", pretext = "";
+                byte[] postext = new byte[10];
                 int counter = 0;
                 for (int i = 0; i < (int)pattern.Length; i++)
                 {
@@ -39,7 +40,9 @@ namespace rabin_karp
                 {
                     if (txthorners == pathorners)
                     {
-                        Console.WriteLine("Match found at location " + counter);
+                        fs.Read(postext, counter, 10);
+                        Console.WriteLine(pretext + pattern + postext);
+                        //Console.WriteLine("Match found at location " + counter);
                         //Environment.Exit(0);
                     }
                     int next = fs.ReadByte(); //read in the new byte
@@ -50,6 +53,11 @@ namespace rabin_karp
                         break;
                     }
                     txthorners = rollhash(txthorners, subtext[0], (char)next, (int)subtext.Length); //roll the hash
+                    pretext += subtext[0];
+                    if (pretext.Length > 10)
+                    {
+                        pretext = pretext.Remove(0, 1);
+                    }
                     subtext = subtext.Remove(0, 1); //change the string in the text
                     subtext += (char)next;
                     //Console.WriteLine(subtext + " = " + txthorners);
