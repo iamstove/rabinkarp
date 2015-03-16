@@ -40,7 +40,7 @@ namespace rabin_karp
                 {
                     if (txthorners == pathorners)
                     {
-                        fs.Read(postext, counter, 10);
+                        fs.Read(postext, counter + pattern.Length, 10);
                         Console.WriteLine(pretext + pattern + postext);
                         //Console.WriteLine("Match found at location " + counter);
                         //Environment.Exit(0);
